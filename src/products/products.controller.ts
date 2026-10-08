@@ -3,6 +3,8 @@ import { PRODUCT_SERVICE } from '../config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { PaginationDto } from '../common';
 import { firstValueFrom, throwError } from 'rxjs';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -12,9 +14,9 @@ export class ProductsController {
 
   @Post()
   createProducto(
-    @Body() body: any
+    @Body() createProductDto: CreateProductDto,
   ) {
-    return 'Crea un producto'
+    return this.productsClient.send({cmd: 'create_product'}, createProductDto)
   }
 
   @Get()
@@ -37,13 +39,13 @@ export class ProductsController {
   }
 
 
-  @Delete('id')
+  @Delete(':id')
   deleteProduct(@Param('id') id: string) {
-    return 'Elimina un producto por id ' + id
+    return this.productsClient.send({cmd: 'delete_product'}, {id})
   }
 
-  @Patch('id')
-  updateProduct(@Param('id') id: string, @Body() body: any) {
-    return 'Actualiza un producto por id ' + id
+  @Patch(':id')
+  updateProduct(@Param('id',ParseIntPipe) id: number, @Body() updateProductDto: UpdateProductDto) {
+    return this.productsClient.send({cmd: 'update_product'},{id, ...updateProductDto} )
   }
 }
