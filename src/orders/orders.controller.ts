@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Patch, Body, Param, Inject, ParseIntPipe, Query } from '@nestjs/common';
-import { CreateOrderDto } from './dto/create-order.dto';
 import { ChangeOrderStatusDto } from './dto/change-order-status.dto';
 import { OrderPaginationDto } from './dto/order-pagination.dto';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { ORDER_SERVICE } from '../config';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Controller('orders')
 export class OrdersController {
