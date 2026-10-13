@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Body, Param, Inject, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param, Inject, Query, ParseUUIDPipe } from '@nestjs/common';
 import { ChangeOrderStatusDto } from './dto/change-order-status.dto';
 import { OrderPaginationDto } from './dto/order-pagination.dto';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
@@ -23,7 +23,7 @@ export class OrdersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     try {
       return await firstValueFrom(
         this.ordersClient.send({ cmd: 'find_one_order' }, { id }),
@@ -35,7 +35,7 @@ export class OrdersController {
 
   @Patch(':id')
   async changeOrderStatus(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() changeOrderStatusDto: ChangeOrderStatusDto,
   ) {
     try {
